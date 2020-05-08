@@ -84,7 +84,8 @@ set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNO
     set ttyfast
     set lazyredraw
     "YouCompleteMe
-
+    let g:ycm_python_binary_path = 'python3'
+    let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
     " Buffers
     set hidden 
     
