@@ -14,6 +14,8 @@ call plug#end()
 set background=dark
 set go=a
 set nohlsearch
+hi Pmenu ctermfg=NONE ctermbg=236 cterm=NONE guifg=NONE guibg=#64666d gui=NONE
+hi PmenuSel ctermfg=NONE ctermbg=24 cterm=NONE guifg=NONE guibg=#204a87 gui=NONE
 set clipboard+=unnamedplus
 set nocompatible
 set mouse=a
