@@ -1,16 +1,20 @@
-
 call plug#begin('~/.vim/plugged')
 Plug 'FelikZ/ctrlp-py-matcher'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
-Plug 'vim-syntastic/syntastic'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'crusoexia/vim-dracula'
+Plug 'junegunn/goyo.vim'
 Plug 'tpope/vim-sensible'
 Plug 'jeetsukumaran/vim-buffergator'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'ycm-core/YouCompleteMe'
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'Shirk/vim-gas'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 call plug#end()
 
+colorscheme dracula
 set background=dark
 set go=a
 set nohlsearch
@@ -21,7 +25,7 @@ set nocompatible
 set mouse=a
 syntax on
 "" Enable normal mode keys in russian layout
-set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
+set langmap=–§–ò–°–í–£–ê–ü–†–®–û–õ–î–¨–¢–©–ó–ô–ö–´–ï–ì–ú–¶–ß–ù–Ø;ABCDEFGHIJKLMNOPQRSTUVWXYZ,—Ñ–∏—Å–≤—É–∞–ø—Ä—à–æ–ª–¥—å—Ç—â–∑–π–∫—ã–µ–≥–º—Ü—á–Ω—è;abcdefghijklmnopqrstuvwxyz
 " basics
     "" tabs
     set tabstop=4
@@ -29,15 +33,13 @@ set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNO
     set expandtab
     set encoding=utf-8
     "" more usable regular search 
-    set incsearch
-    filetype plugin on
+        filetype plugin on
     syntax enable
     set ruler
     set relativenumber number
     "" autocomplete
     set wildmenu
     set wildmode=longest,list
-    set hlsearch
     "" path search 
     set path+=**
 
@@ -58,20 +60,6 @@ set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNO
     let g:airline#extensions#tabline#left_sep = ' '
     let g:airline#extensions#tabline#left_alt_sep = '|'
     let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-
-    " syntastic
-    set statusline+=%f
-    set statusline+=%#warningmsg#
-    set statusline+=%{SyntasticStatuslineFlag()}
-    set statusline+=%*
-    let g:syntastic_c_checkers=['make', 'splint', 'gcc']
-    let g:syntastic_always_populate_loc_list = 1
-    let g:syntastic_auto_loc_list = 1
-    let g:syntastic_check_on_open = 1
-    let g:syntastic_check_on_wq = 0
-    let g:syntastic_error_symbol = '✗'
-    let g:syntastic_warning_symbol = '⚠️'
-
     "Ctrlp matcher
     let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 
@@ -94,11 +82,12 @@ set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNO
     " New empty buffer
     nmap <leader>T :enew<cr>
 
-    " Next buffer
-    nmap <leader>l :bprevious<CR>
-
     " Previous buffer   
     nmap <leader>h :bprevious<CR>
+
+    " Next buffer
+    nmap <leader>l :bnext<CR>
+
 
     " Close current buffer & go to previous one
     nmap <leader>bq :bp <BAR> bd #<CR>
@@ -141,5 +130,35 @@ set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNO
 
     " Shared bindings from Solution #1 from earlier
     nmap <leader>T :enew<cr>
-    nmap <leader>bq :bp <BAR> bd #<cr> 
+    nmap <leader>bq :bp <BAR> bd #<cr>  
 
+    au! BufRead,BufNewFile *.markdown set filetype=mkd
+    au! BufRead,BufNewFile *.md       set filetype=mkd
+
+    " ale
+    let b:ale_linters = ['eslint']
+
+    set omnifunc=ale#completion#OmniFunc
+
+" CoC
+" set tagfunc=CocTagFunc
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" dict
+
+if has('unix')
+    set dictionary+=/usr/share/dict/words
+else
+    set dictionary+=~/AppData/Local/nvim/words
+endif
